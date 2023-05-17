@@ -1,7 +1,15 @@
-const mongoose = require('mongoose')
-const Movie = require('../models/Movie.model')
+const mongoose = require('mongoose');
+const Movie = require('../models/Movie.model');
 
-// To insert in "seeds/movies.seed.js"
+// mongodb://127.0.0.1:27017/recipe-app
+
+mongoose.connect('mongodb://127.0.0.1:27017/lab-express-cinema')
+.then(() => {
+  console.log('connected to database');
+})
+.catch((error) => {
+  console.log('error connecting to database');
+})
 
 const movies = [
   {
@@ -87,21 +95,10 @@ const movies = [
 ];
 
 
-
-const MONGO_URI = 'mongodb://localhost:27017/lab-express-cinema'
-mongoose
-.connect(MONGO_URI)
-.then(x => {
-console.log(`Connected to Mongo database: "${x.connections[0].name}"`)
-return Movie.create(movies)
+Movie.create(movies)
+.then((response) => {
+  console.log(response);
 })
-.then(moviesFromDB => {
-  console.log(`Created ${moviesFromDB.length} movies`)
-  return mongoose.connection.close()
-})
-.then(() => {
-  console.log('DB connection closed!')
-})
-.catch(err => {
-  console.log(`An error occurred while creating movies from the DB: ${err}`)
+.catch((err) => {
+  console.log(err)
 })
